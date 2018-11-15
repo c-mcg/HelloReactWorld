@@ -7,7 +7,10 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, Button } from 'react-native';
+import autoBind from 'auto-bind'
+
+import TextField from './components/TextField'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -18,12 +21,45 @@ const instructions = Platform.select({
 
 type Props = {};
 export default class App extends Component<Props> {
+
+  constructor(props) {
+    super(props);
+    autoBind(this);
+
+    this.state = {
+      a: "3",
+      b: "6",
+      result: null,
+    }
+
+  }
+
+  setA(a) {
+    this.setState({ a })
+  }
+
+  setB(b) {
+    this.setState({ b })
+  }
+
+  calculateValue() {
+    const { a, b } = this.state;
+    this.setState({
+      result: parseInt(a) + parseInt(b),
+    })
+  }
+
   render() {
+    const { a, b } = this.state;
+
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
+        <TextField value={a} onChange={this.setA}/>
+        <TextField value={b} onChange={this.setB}/>
+        <Text style={styles.welcome}>{parseInt(a) + parseInt(b)}</Text>
+        <Text style={styles.instructions}>example</Text>
         <Text style={styles.instructions}>{instructions}</Text>
+        {/* <Button> </Button> */}
       </View>
     );
   }
