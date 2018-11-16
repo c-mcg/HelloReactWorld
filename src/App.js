@@ -12,7 +12,7 @@ import autoBind from 'auto-bind'
 
 import TextField from './components/TextField'
 import Button from './components/Button'
-
+import NumberPad from './components/NumberPad'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -43,8 +43,11 @@ const styles = StyleSheet.create({
   },
 });
 
-type Props = {};
-export default class App extends Component<Props> {
+function add(x, y) {
+    return x + y;
+}
+
+export default class App extends Component {
 
   constructor(props) {
     super(props);
@@ -53,35 +56,55 @@ export default class App extends Component<Props> {
     this.state = {
       currentInput: 0,
       result: 0,
+      lastOperation: null,
     }
 
   }
 
-  setCurrentInput(newValue) {
+  onInputChange(newValue) {
     this.setState({
       currentInput: parseInt(newValue),
     })
   }
 
-  calculateValue() {
-    // const { a } = this.state;
-    // this.setState({
-    //   result: parseInt(a) + parseInt(b),
-    // })
+  setResult(result){
+    this.setState({ result });
   }
 
-  add() {
-    this.setState({
-      result: this.state.result + this.state.currentInput,
-      // currentInput: 0,
-    });
+  calculate() {
+      console.log(this.state);
+      this.forceUpdate(() => {
+      const { lastOperation, result, currentInput } = this.state;
+      if (lastOperation) {
+        const newResult = lastOperation(result, currentInput);
+        this.setState({
+            result: newResult,
+            lastOperation: null,
+        })
+      }
+    })
+      //
+  }
 
+  add(){
+    console.log('result on add', this.state.currentInput)
+    this.setState({
+        result: this.state.currentInput,
+        lastOperation: add
+    })
   }
 
   clear() {
     this.setState({
       result: 0,
       currentInput: 0,
+      lastOperation: null,
+    })
+  }
+
+  setCurrentInput(val) {
+    this.setState({
+        currentInput: val
     })
   }
 
@@ -90,7 +113,7 @@ export default class App extends Component<Props> {
 
     return (
       <View style={styles.container}>
-        <TextField value={currentInput} onChange={this.setCurrentInput} />
+        <TextField value={currentInput.toString()} onChange={this.onInputChange} disabled />
 
         <Text style={styles.welcome}>{this.state.result}</Text>
 
@@ -104,9 +127,15 @@ export default class App extends Component<Props> {
             onPress={this.clear}
           />
 
+            <NumberPad onNumberPress={this.setCurrentInput}></NumberPad>
+          <Button
+            text="1"
+            onPress={() => this.setCurrentInput(1)}
+          />
+
           <Button
             text="="
-            onPress={this.calculateValue}
+            onPress={this.calculate}
           />
 
           <Button
