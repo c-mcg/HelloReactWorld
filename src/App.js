@@ -6,11 +6,13 @@
  * @flow
  */
 
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button } from 'react-native';
+import React, { Component } from 'react';
+import { Alert, Platform, StyleSheet, Text, View } from 'react-native';
 import autoBind from 'auto-bind'
 
 import TextField from './components/TextField'
+import Button from './components/Button'
+
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -18,52 +20,6 @@ const instructions = Platform.select({
     'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
-
-type Props = {};
-export default class App extends Component<Props> {
-
-  constructor(props) {
-    super(props);
-    autoBind(this);
-
-    this.state = {
-      a: "3",
-      b: "6",
-      result: null,
-    }
-
-  }
-
-  setA(a) {
-    this.setState({ a })
-  }
-
-  setB(b) {
-    this.setState({ b })
-  }
-
-  calculateValue() {
-    const { a, b } = this.state;
-    this.setState({
-      result: parseInt(a) + parseInt(b),
-    })
-  }
-
-  render() {
-    const { a, b } = this.state;
-
-    return (
-      <View style={styles.container}>
-        <TextField value={a} onChange={this.setA}/>
-        <TextField value={b} onChange={this.setB}/>
-        <Text style={styles.welcome}>{parseInt(a) + parseInt(b)}</Text>
-        <Text style={styles.instructions}>example</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-        {/* <Button> </Button> */}
-      </View>
-    );
-  }
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -82,4 +38,85 @@ const styles = StyleSheet.create({
     color: '#333333',
     marginBottom: 5,
   },
+  buttonRow: {
+    flexDirection: 'row',
+  },
 });
+
+type Props = {};
+export default class App extends Component<Props> {
+
+  constructor(props) {
+    super(props);
+    autoBind(this);
+
+    this.state = {
+      currentInput: 0,
+      result: 0,
+    }
+
+  }
+
+  setCurrentInput(newValue) {
+    this.setState({
+      currentInput: parseInt(newValue),
+    })
+  }
+
+  calculateValue() {
+    // const { a } = this.state;
+    // this.setState({
+    //   result: parseInt(a) + parseInt(b),
+    // })
+  }
+
+  add() {
+    this.setState({
+      result: this.state.result + this.state.currentInput,
+      // currentInput: 0,
+    });
+
+  }
+
+  clear() {
+    this.setState({
+      result: 0,
+      currentInput: 0,
+    })
+  }
+
+  render() {
+    const { currentInput } = this.state;
+
+    return (
+      <View style={styles.container}>
+        <TextField value={currentInput} onChange={this.setCurrentInput} />
+
+        <Text style={styles.welcome}>{this.state.result}</Text>
+
+        <View style={styles.buttonRow}>
+          <Button
+            style={{
+              backgroundColor: '#336699',
+              color: 'white',
+            }}
+            text="Clr"
+            onPress={this.clear}
+          />
+
+          <Button
+            text="="
+            onPress={this.calculateValue}
+          />
+
+          <Button
+            text="+"
+            onPress={this.add}
+          />
+        </View>
+
+      </View>
+    );
+  }
+}
+
