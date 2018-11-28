@@ -20,6 +20,7 @@ export default class NumberPad extends Component {
                 <Button
                     key={index}
                     text={num}
+                    style={{ flex: 0, flexGrow: 1 }}
                     onPress={() => {this.props.onNumberPress(num)}}
                 />
             );
