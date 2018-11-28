@@ -13,6 +13,10 @@ import autoBind from 'auto-bind'
 import TextField from './components/TextField'
 import Button from './components/Button'
 import NumberPad from './components/NumberPad'
+<<<<<<< HEAD
+=======
+
+>>>>>>> 36a421e33294d2e0e940eff80e648c34bebdeb2f
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -99,6 +103,15 @@ export default class App extends Component {
       result: 0,
       currentInput: 0,
       lastOperation: null,
+<<<<<<< HEAD
+=======
+    })
+  }
+
+  setCurrentInput(val) {
+    this.setState({
+        currentInput: val
+>>>>>>> 36a421e33294d2e0e940eff80e648c34bebdeb2f
     })
   }
 
@@ -130,6 +143,11 @@ export default class App extends Component {
           />
 
             <NumberPad onNumberPress={this.setCurrentInput}></NumberPad>
+          <Button
+            text="1"
+            onPress={() => this.setCurrentInput(1)}
+          />
+
           <Button
             text="1"
             onPress={() => this.setCurrentInput(1)}
