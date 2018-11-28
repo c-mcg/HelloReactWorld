@@ -3,20 +3,28 @@ import { View } from 'react-native'
 import Button from './Button'
 import { func, number } from 'prop-types'
 
+const BUTTONS_PER_ROW = 3;
+
 export default class NumberPad extends Component {
 
     renderButtons() {
         let currRow = [];
-        return [...Array(10).keys()].reduce((acc, num, index) => {
+        const buttons = [
+            '7', '8', '9',
+            '4', '5', '6',
+            '1', '2', '3',
+            '0', '.', '±',
+        ];
+        return buttons.reduce((acc, num, index) => {
             currRow.push(
                 <Button
                     key={index}
-                    text={num.toString()}
+                    text={num}
                     onPress={() => {this.props.onNumberPress(num)}}
                 />
             );
-
-            if (currRow.length === this.props.buttonsPerRow || index === 9) {
+            
+            if (currRow.length === BUTTONS_PER_ROW || index === buttons.length - 1) {
                 acc.push(
                     <View style={{flexDirection: 'row'}} key={acc.length}>
                         { currRow }
@@ -41,10 +49,8 @@ export default class NumberPad extends Component {
 
 NumberPad.propTypes = {
     onNumberPress: func,
-    buttonsPerRow: number,
 }
 
 NumberPad.defaultProps = { 
     onNumberPress: () => {},
-    buttonsPerRow: 4,
 }

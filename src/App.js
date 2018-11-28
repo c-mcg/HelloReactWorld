@@ -103,9 +103,11 @@ export default class App extends Component {
   }
 
   setCurrentInput(val) {
-    this.setState({
-        currentInput: val
-    })
+    if (!isNaN(val)) {
+        this.setState({
+            currentInput: parseInt(val),
+        })
+    }
   }
 
   render() {
